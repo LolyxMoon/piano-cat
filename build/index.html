@@ -5,8 +5,281 @@
     <meta name="viewport" content="width=device-width">
     <title>Piano Cat</title>
     <link href="https://fonts.googleapis.com/css?family=Hammersmith+One" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="icon" href="./assets/images/catty.png">
-    <!-- <script src="/build/bundle.js"></script> -->
+    <style>
+        /* TikTok Carousel Styles */
+        .tiktok-section {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #ff8a5c 100%);
+            padding: 40px 20px;
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tiktok-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .tiktok-section h2 {
+            font-family: 'Fredoka', 'Hammersmith One', sans-serif;
+            font-size: 2.5rem;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .tiktok-section h2::before {
+            content: '🐕';
+            margin-right: 15px;
+        }
+
+        .tiktok-section h2::after {
+            content: '🎹';
+            margin-left: 15px;
+        }
+
+        .tiktok-subtitle {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .tiktok-subtitle a {
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            background: rgba(0,0,0,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .tiktok-subtitle a:hover {
+            background: rgba(0,0,0,0.4);
+            transform: scale(1.05);
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: scale(0.8) rotateY(-30deg);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            transform: scale(1) rotateY(0deg);
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        .carousel-slide.prev {
+            opacity: 0.3;
+            transform: translateX(-50%) scale(0.7) rotateY(20deg);
+        }
+
+        .carousel-slide.next {
+            opacity: 0.3;
+            transform: translateX(50%) scale(0.7) rotateY(-20deg);
+        }
+
+        .video-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.3),
+                0 0 0 5px rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255,255,255,0.1) 50%,
+                transparent 70%
+            );
+            animation: shine 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .tiktok-embed-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tiktok-embed-wrapper iframe {
+            border: none !important;
+            border-radius: 12px;
+        }
+
+        .video-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ff0050 0%, #00f2ea 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,0,80,0.3);
+        }
+
+        .video-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,0,80,0.4);
+        }
+
+        .video-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Navigation Buttons */
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: #fff;
+            color: #c44569;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.1);
+            background: #c44569;
+            color: #fff;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Dots Indicator */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #fff;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .dot:hover {
+            background: rgba(255,255,255,0.8);
+        }
+
+        /* Paw prints decoration */
+        .paw-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.2;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .paw-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .paw-2 { top: 20%; right: 8%; animation-delay: 1s; }
+        .paw-3 { bottom: 15%; left: 10%; animation-delay: 2s; }
+        .paw-4 { bottom: 25%; right: 5%; animation-delay: 0.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .carousel-container {
+                max-width: 320px;
+            }
+            .tiktok-section h2 {
+                font-size: 1.8rem;
+            }
+            .nav-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -41,5 +314,198 @@
             <img class="keyhelper" src="./assets/images/keyhelper.png">
         </div>
     </div>
+
+    <!-- TikTok Carousel Section -->
+    <section class="tiktok-section">
+        <!-- Paw decorations -->
+        <span class="paw-decoration paw-1">🐾</span>
+        <span class="paw-decoration paw-2">🐾</span>
+        <span class="paw-decoration paw-3">🐾</span>
+        <span class="paw-decoration paw-4">🐾</span>
+
+        <h2>Ruby's Videos</h2>
+        <p class="tiktok-subtitle">Follow <a href="https://www.tiktok.com/@ruby_thelabrador" target="_blank">@ruby_thelabrador</a> on TikTok!</p>
+
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                <!-- Slide 1 -->
+                <div class="carousel-slide active" data-index="0">
+                    <div class="video-card">
+                        <div class="tiktok-embed-wrapper">
+                            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@ruby_thelabrador/video/7558930694261525791" data-video-id="7558930694261525791" style="max-width: 370px; min-width: 300px;">
+                                <section></section>
+                            </blockquote>
+                        </div>
+                        <a href="https://www.tiktok.com/@ruby_thelabrador/video/7558930694261525791" target="_blank" class="video-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+                            </svg>
+                            Ver en TikTok
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-slide" data-index="1">
+                    <div class="video-card">
+                        <div class="tiktok-embed-wrapper">
+                            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@ruby_thelabrador/video/7553398706490314015" data-video-id="7553398706490314015" style="max-width: 370px; min-width: 300px;">
+                                <section></section>
+                            </blockquote>
+                        </div>
+                        <a href="https://www.tiktok.com/@ruby_thelabrador/video/7553398706490314015" target="_blank" class="video-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+                            </svg>
+                            Ver en TikTok
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="carousel-slide" data-index="2">
+                    <div class="video-card">
+                        <div class="tiktok-embed-wrapper">
+                            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@ruby_thelabrador/video/7551504174693813535" data-video-id="7551504174693813535" style="max-width: 370px; min-width: 300px;">
+                                <section></section>
+                            </blockquote>
+                        </div>
+                        <a href="https://www.tiktok.com/@ruby_thelabrador/video/7551504174693813535" target="_blank" class="video-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+                            </svg>
+                            Ver en TikTok
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="carousel-slide" data-index="3">
+                    <div class="video-card">
+                        <div class="tiktok-embed-wrapper">
+                            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@ruby_thelabrador/video/7529567658388327710" data-video-id="7529567658388327710" style="max-width: 370px; min-width: 300px;">
+                                <section></section>
+                            </blockquote>
+                        </div>
+                        <a href="https://www.tiktok.com/@ruby_thelabrador/video/7529567658388327710" target="_blank" class="video-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+                            </svg>
+                            Ver en TikTok
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="carousel-nav">
+                <button class="nav-btn" id="prevBtn">◀</button>
+                <button class="nav-btn" id="nextBtn">▶</button>
+            </div>
+
+            <!-- Dots -->
+            <div class="carousel-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+                <span class="dot" data-index="3"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- TikTok Embed Script -->
+    <script async src="https://www.tiktok.com/embed.js"></script>
+
+    <!-- Carousel JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.dot');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+
+            function updateCarousel() {
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'prev', 'next');
+                    
+                    if (index === currentIndex) {
+                        slide.classList.add('active');
+                    } else if (index === (currentIndex - 1 + totalSlides) % totalSlides) {
+                        slide.classList.add('prev');
+                    } else if (index === (currentIndex + 1) % totalSlides) {
+                        slide.classList.add('next');
+                    }
+                });
+
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateCarousel();
+            }
+
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                updateCarousel();
+            }
+
+            // Event listeners
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    goToSlide(parseInt(dot.dataset.index));
+                });
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === 'ArrowLeft') prevSlide();
+            });
+
+            // Touch/swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const carousel = document.querySelector('.carousel-wrapper');
+
+            carousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            carousel.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            }
+
+            // Auto-play (optional - uncomment to enable)
+            // setInterval(nextSlide, 5000);
+        });
+    </script>
+
 <script type="text/javascript" src="vendor.js"></script><script type="text/javascript" src="bundle.js"></script></body>
 </html>
